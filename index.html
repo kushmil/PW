@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>PW NSAT 11th NEET • For Priyanshi</title>
+
+  <!-- Google Fonts: SF Pro alternate (Inter & Outfit) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- iziToast -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* iOS Design Tokens */
+    :root {
+      --bg: #000000;
+      --card-bg: rgba(28, 28, 30, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #FFFFFF;
+      --text-sub: #8E8E93;
+      --accent: #0A84FF;
+      --accent-glow: rgba(10, 132, 255, 0.35);
+      --success: #30D158;
+      --nav-glass: rgba(20, 20, 22, 0.85);
+      --chip-bg: rgba(255, 255, 255, 0.08);
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="light"] {
+      --bg: #F2F2F7;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --text-main: #000000;
+      --text-sub: #6C6C70;
+      --accent: #007AFF;
+      --accent-glow: rgba(0, 122, 255, 0.25);
+      --success: #34C759;
+      --nav-glass: rgba(245, 245, 247, 0.85);
+      --chip-bg: rgba(0, 0, 0, 0.05);
+      --shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "SF Pro Display", sans-serif;
+      transition: background-color 0.4s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Ambient iOS Backlight */
+    .ambient-glow {
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.8;
+      filter: blur(80px);
+    }
+
+    /* ================= iOS Splash Screen ================= */
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+    }
+
+    .splash-logo {
+      width: 84px;
+      height: 84px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #0A84FF, #5E5CE6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 30px var(--accent-glow);
+      margin-bottom: 24px;
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    .splash-logo i {
+      font-size: 38px;
+      color: white;
+    }
+
+    .splash-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .splash-badge {
+      font-size: 13px;
+      color: var(--accent);
+      background: var(--chip-bg);
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--card-border);
+      font-weight: 600;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* ================= iOS Header & Dynamic Island ================= */
+    .ios-header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      max-width: 680px;
+      padding: 14px 20px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: var(--nav-glass);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .dynamic-island {
+      background: #000;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .theme-toggle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .theme-toggle-btn:active {
+      transform: scale(0.88);
+    }
+
+    /* ================= Main Container ================= */
+    main {
+      width: 100%;
+      max-width: 680px;
+      padding: 24px 20px 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      z-index: 1;
+    }
+
+    /* ================= 3D Parallax Hero Card ================= */
+    .hero-container {
+      perspective: 1000px;
+      width: 100%;
+    }
+
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      padding: 32px 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--chip-bg);
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--card-border);
+      margin-bottom: 18px;
+      transform: translateZ(25px);
+    }
+
+    .hero-card h1 {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.6px;
+      margin-bottom: 10px;
+      transform: translateZ(35px);
+    }
+
+    .hero-card p {
+      color: var(--text-sub);
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      transform: translateZ(20px);
+    }
+
+    /* PDF Spec Pill inside Card */
+    .file-pill {
+      background: rgba(10, 132, 255, 0.1);
+      border: 1px solid rgba(10, 132, 255, 0.2);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      transform: translateZ(30px);
+    }
+
+    .file-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #FF3B30;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 14px rgba(255, 59, 48, 0.3);
+    }
+
+    .file-info {
+      overflow: hidden;
+    }
+
+    .file-name {
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .file-meta {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    /* Primary iOS Button */
+    .btn-ios {
+      width: 100%;
+      height: 54px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px var(--accent-glow);
+      transform: translateZ(40px);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-ios:active {
+      transform: translateZ(40px) scale(0.97);
+      opacity: 0.9;
+    }
+
+    /* ================= Section Header ================= */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title span {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-weight: 500;
+    }
+
+    /* ================= Horizontal Scroll Section ================= */
+    .horizontal-scroll-wrap {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 4px 4px 16px;
+      margin: 0 -20px;
+      padding-left: 20px;
+      padding-right: 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .horizontal-scroll-wrap::-webkit-scrollbar {
+      display: none;
+    }
+
+    .h-card {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .h-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .h-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
+
+    .h-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .h-card p {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* ================= Document Highlights ================= */
+    .list-group {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .list-item {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    .list-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--chip-bg);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .list-content h4 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .list-content p {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    /* ================= Bottom Floating iOS Dock ================= */
+    .dock-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 480px;
+      background: var(--nav-glass);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 10px 14px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .dock-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dock-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF9500, #FF2D55);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .dock-text h5 {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .dock-text p {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .dock-btn {
+      padding: 10px 20px;
+      background: var(--text-main);
+      color: var(--bg);
+      border: none;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .dock-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* SweetAlert2 iOS Skin Overrides */
+    .swal2-popup.ios-swal {
+      border-radius: 24px !important;
+      background: var(--card-bg) !important;
+      backdrop-filter: blur(30px) !important;
+      -webkit-backdrop-filter: blur(30px) !important;
+      border: 1px solid var(--card-border) !important;
+      color: var(--text-main) !important;
+      padding: 24px !important;
+    }
+
+    .swal2-title {
+      color: var(--text-main) !important;
+      font-size: 18px !important;
+      font-weight: 700 !important;
+    }
+
+    .swal2-html-container {
+      color: var(--text-sub) !important;
+      font-size: 14px !important;
+    }
+
+    .swal2-confirm.ios-swal-confirm {
+      background: var(--accent) !important;
+      border-radius: 14px !important;
+      padding: 12px 24px !important;
+      font-weight: 700 !important;
+      font-size: 14px !important;
+      box-shadow: 0 4px 14px var(--accent-glow) !important;
+    }
+
+    .swal2-cancel.ios-swal-cancel {
+      background: var(--chip-bg) !important;
+      color: var(--text-main) !important;
+      border-radius: 14px !important;
+      padding: 12px 24px !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Lighting FX -->
+  <div class="ambient-glow"></div>
+
+  <!-- Splash Screen -->
+  <div id="splash-screen">
+    <div class="splash-logo">
+      <i class="fa-solid fa-graduation-cap"></i>
+    </div>
+    <div class="splash-title">PW NSAT 11th NEET</div>
+    <div class="splash-badge"><i class="fa-solid fa-sparkles"></i> Specially for Priyanshi</div>
+  </div>
+
+  <!-- iOS Sticky Top Bar -->
+  <header class="ios-header">
+    <div class="dynamic-island">
+      <span class="status-dot"></span>
+      <span>Priyanshi's Study Desk</span>
+    </div>
+
+    <!-- Light/Dark Mode Switcher -->
+    <button class="theme-toggle-btn" id="theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
+      <i class="fa-solid fa-sun" id="theme-icon"></i>
+    </button>
+  </header>
+
+  <main>
+    <!-- 3D Interactive Parallax Hero Card -->
+    <div class="hero-container">
+      <div class="hero-card" id="tilt-card">
+        <div class="hero-badge">
+          <i class="fa-solid fa-star"></i> PW National Scholarship Test
+        </div>
+        <h1>Hey Priyanshi 👋</h1>
+        <p>Aapka 11th NEET NSAT ka official question paper & solution kit tayyar hai. Neeche diye button se directly download kar sakti ho.</p>
+
+        <!-- PDF File Info Box -->
+        <div class="file-pill">
+          <div class="file-icon">
+            <i class="fa-solid fa-file-pdf"></i>
+          </div>
+          <div class="file-info">
+            <div class="file-name">PW-NSAT-11th-neet.pdf</div>
+            <div class="file-meta">Original PDF • Class 11 NEET Preparation</div>
+          </div>
+        </div>
+
+        <button class="btn-ios" onclick="initiateDownload()">
+          <i class="fa-solid fa-cloud-arrow-down"></i> Download PDF Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Horizontal Scroll Section: Highlights -->
+    <div>
+      <div class="section-title">
+        Test Highlights & Structure
+        <span>Swipe <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+
+      <div class="horizontal-scroll-wrap" id="h-scroll">
+        <!-- Card 1 -->
+        <div class="h-card">
+          <div class="h-card-icon" style="background: linear-gradient(135deg, #30D158, #007AFF);">
+            <i class="fa-solid fa-dna"></i>
+          </div>
+          <div>
+            <h3>Biology Focus</h3>
+            <p>Botany & Zoology full syllabus weightage & high yield questions covered.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="h-card">
+          <div class="h-card-icon" style="background: linear-gradient(135deg, #FF9500, #FF2D55);">
+            <i class="fa-solid fa-atom"></i>
+          </div>
+          <div>
+            <h3>Physics Concept Map</h3>
+            <p>Mechanics, Kinematics and formula-based numerical practice sets.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="h-card">
+          <div class="h-card-icon" style="background: linear-gradient(135deg, #AF52DE, #5856D6);">
+            <i class="fa-solid fa-flask-vial"></i>
+          </div>
+          <div>
+            <h3>Chemistry Section</h3>
+            <p>Physical & Inorganic core fundamentals with NCERT direct lines.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="h-card">
+          <div class="h-card-icon" style="background: linear-gradient(135deg, #0A84FF, #64D2FF);">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <h3>Speed & Accuracy</h3>
+            <p>Mock exam simulation pattern designed according to current NEET trends.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's Inside Section -->
+    <div>
+      <div class="section-title">PDF Details & Key Inclusions</div>
+      <div class="list-group">
+        <div class="list-item">
+          <div class="list-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="list-content">
+            <h4>Complete Answer Key</h4>
+            <p>Verified solutions by Physics Wallah faculty.</p>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="list-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="list-content">
+            <h4>Scholarship Evaluation</h4>
+            <p>Cutoff analysis & marking pattern included.</p>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="list-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="list-content">
+            <h4>Offline Available</h4>
+            <p>Download once, study anytime without internet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Floating iOS Dock -->
+  <div class="dock-container">
+    <div class="dock-left">
+      <div class="dock-avatar">P</div>
+      <div class="dock-text">
+        <h5>Priyanshi</h5>
+        <p>Best of luck for NEET!</p>
+      </div>
+    </div>
+    <button class="dock-btn" onclick="initiateDownload()">
+      <i class="fa-solid fa-download"></i> Get File
+    </button>
+  </div>
+
+  <script>
+    const PDF_FILENAME = "PW-NSAT-11th-neet.pdf";
+
+    // 1. Splash Screen Fade Out
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        splash.style.opacity = "0";
+        splash.style.visibility = "hidden";
+
+        // Welcoming toast for Priyanshi
+        iziToast.show({
+          title: 'Hello Priyanshi! 👋',
+          message: 'Your NSAT 11th NEET document is ready.',
+          position: 'topCenter',
+          theme: document.documentElement.getAttribute("data-theme") === 'dark' ? 'dark' : 'light',
+          backgroundColor: 'rgba(10, 132, 255, 0.95)',
+          titleColor: '#fff',
+          messageColor: '#fff',
+          icon: 'fa-solid fa-graduation-cap',
+          iconColor: '#fff',
+          timeout: 4000,
+          progressBar: false
+        });
+      }, 1500);
+    });
+
+    // 2. iOS Light / Dark Mode Toggle
+    const themeBtn = document.getElementById("theme-btn");
+    const themeIcon = document.getElementById("theme-icon");
+    const htmlElem = document.documentElement;
+
+    function applyTheme(mode) {
+      htmlElem.setAttribute("data-theme", mode);
+      if (mode === "dark") {
+        themeIcon.classList.remove("fa-moon");
+        themeIcon.classList.add("fa-sun");
+      } else {
+        themeIcon.classList.remove("fa-sun");
+        themeIcon.classList.add("fa-moon");
+      }
+      localStorage.setItem("user-theme", mode);
+    }
+
+    const savedTheme = localStorage.getItem("user-theme") || "dark";
+    applyTheme(savedTheme);
+
+    themeBtn.addEventListener("click", () => {
+      const current = htmlElem.getAttribute("data-theme");
+      const nextTheme = current === "dark" ? "light" : "dark";
+      applyTheme(nextTheme);
+
+      iziToast.info({
+        title: 'Theme Changed',
+        message: `Switched to ${nextTheme.toUpperCase()} mode.`,
+        position: 'bottomCenter',
+        timeout: 1800
+      });
+    });
+
+    // 3. 3D Parallax Tilt Effect for Hero Card
+    const card = document.getElementById("tilt-card");
+    const container = document.querySelector(".hero-container");
+
+    container.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      const rotateX = -(y / rect.height) * 16;
+      const rotateY = (x / rect.width) * 16;
+
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    container.addEventListener("mouseleave", () => {
+      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+
+    // 4. Download Confirmation with SweetAlert2 & iziToast
+    function initiateDownload() {
+      Swal.fire({
+        title: 'Download NSAT Document?',
+        html: `Hi <b>Priyanshi</b>, kya aap <code>${PDF_FILENAME}</code> download karna chahti ho?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Download',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        customClass: {
+          popup: 'ios-swal',
+          confirmButton: 'ios-swal-confirm',
+          cancelButton: 'ios-swal-cancel'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          triggerFileDownload();
+        }
+      });
+    }
+
+    function triggerFileDownload() {
+      // Confetti celebration
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.7 }
+      });
+
+      // Show success toast
+      iziToast.success({
+        title: 'Downloading...',
+        message: `${PDF_FILENAME} saving to your device!`,
+        position: 'topCenter',
+        timeout: 3500
+      });
+
+      // Create invisible link and trigger download of the local file
+      const link = document.createElement("a");
+      link.href = PDF_FILENAME;
+      link.download = PDF_FILENAME;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
