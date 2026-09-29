@@ -1,66 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>YrChitChat • Connecting people</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Priyanshi's Notes Hub ✨ | IT/ITeS 12th</title>
 
-  <!-- Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <!-- SweetAlert2 -->
+  <!-- SweetAlert2 CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!-- iziToast -->
+  <!-- iziToast CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/izitoast.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 
-  <!-- Confetti -->
+  <!-- Canvas Confetti CDN -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    /* ================= DYNAMIC CSS VARIABLES ================= */
     :root {
-      --font-size: 15px;
-      --border-radius: 22px;
-      --glass-blur: 24px;
-      --accent: #0A84FF;
-      --accent-glow: rgba(10, 132, 255, 0.4);
-      --bg-wallpaper: radial-gradient(circle at 10% 20%, #1e1145 0%, #0d0c18 50%, #050508 100%);
-      --surface: rgba(28, 28, 32, 0.72);
-      --surface-solid: #1c1c20;
-      --surface-border: rgba(255, 255, 255, 0.12);
-      --text-main: #FFFFFF;
-      --text-muted: #8E8E93;
-      --traffic-red: #FF5F56;
-      --traffic-yellow: #FFBD2E;
-      --traffic-green: #27C93F;
-      --system-font: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", sans-serif;
+      --bg: #f2f2f7;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-border: rgba(255, 255, 255, 0.6);
+      --text: #1c1c1e;
+      --text-muted: #8e8e93;
+      --accent: #ff4d6d;
+      --accent-soft: rgba(255, 77, 109, 0.12);
+      --apple-blue: #007aff;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      --header-bg: rgba(242, 242, 247, 0.82);
     }
 
-    [data-theme="light"] {
-      --bg-wallpaper: radial-gradient(circle at 10% 20%, #E3E8F8 0%, #F5F7FB 50%, #ECEFF8 100%);
-      --surface: rgba(255, 255, 255, 0.8);
-      --surface-solid: #ffffff;
-      --surface-border: rgba(0, 0, 0, 0.08);
-      --text-main: #000000;
-      --text-muted: #6C6C70;
-      --accent-glow: rgba(10, 132, 255, 0.2);
-    }
-
-    [data-theme="oled"] {
-      --bg-wallpaper: #000000;
-      --surface: rgba(16, 16, 16, 0.85);
-      --surface-solid: #101010;
-      --surface-border: rgba(255, 255, 255, 0.16);
-      --text-main: #ffffff;
-      --text-muted: #757575;
-      --accent-glow: rgba(10, 132, 255, 0.5);
+    [data-theme="dark"] {
+      --bg: #000000;
+      --card-bg: rgba(28, 28, 30, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f5f5f7;
+      --text-muted: #98989d;
+      --accent: #ff758f;
+      --accent-soft: rgba(255, 117, 143, 0.16);
+      --apple-blue: #0a84ff;
+      --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+      --header-bg: rgba(0, 0, 0, 0.75);
     }
 
     * {
@@ -72,1136 +52,613 @@
     }
 
     body {
-      font-family: var(--system-font);
-      font-size: var(--font-size);
-      background: var(--bg-wallpaper);
-      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      transition: background-color 0.4s ease, color 0.4s ease;
       overflow-x: hidden;
-      transition: background 0.4s ease, color 0.3s ease;
     }
 
-    /* Ambient lighting */
-    .screen-ambient {
+    /* === Cute Splash Screen === */
+    #splash-screen {
       position: fixed;
-      top: -10vw;
-      right: -10vw;
-      width: 50vw;
-      height: 50vw;
-      background: var(--accent-glow);
-      filter: blur(140px);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease;
     }
 
-    /* ================= DESKTOP (macOS) STYLING ================= */
-    @media (min-width: 769px) {
-      /* macOS Top Menu Bar */
-      .macos-menubar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 32px;
-        padding: 0 16px;
-        background: rgba(20, 20, 22, 0.45);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border-bottom: 1px solid var(--surface-border);
-        font-size: 13px;
-        font-weight: 500;
-        z-index: 1000;
-      }
-      .macos-menu-left, .macos-menu-right {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-      }
-      .apple-icon {
-        font-size: 15px;
-        cursor: pointer;
-      }
-      .menu-bold { font-weight: 700; }
-      .menu-item {
-        cursor: pointer;
-        opacity: 0.85;
-        transition: opacity 0.2s;
-      }
-      .menu-item:hover { opacity: 1; }
-
-      /* Mobile elements hidden on PC */
-      .ios-header, .ios-tabbar { display: none !important; }
-
-      /* Desktop Window Container */
-      .desktop-stage {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px 24px 100px;
-        z-index: 10;
-      }
-
-      .macos-window {
-        width: 100%;
-        max-width: 1020px;
-        height: 680px;
-        background: var(--surface);
-        backdrop-filter: blur(var(--glass-blur));
-        -webkit-backdrop-filter: blur(var(--glass-blur));
-        border: 1px solid var(--surface-border);
-        border-radius: var(--border-radius);
-        box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        animation: windowPop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-
-      .window-header {
-        height: 48px;
-        padding: 0 18px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid var(--surface-border);
-        position: relative;
-      }
-
-      .traffic-lights {
-        display: flex;
-        gap: 8px;
-      }
-      .traffic-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-      .dot-red { background: var(--traffic-red); }
-      .dot-yellow { background: var(--traffic-yellow); }
-      .dot-green { background: var(--traffic-green); }
-
-      .window-title {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-weight: 700;
-        font-size: 13.5px;
-        color: var(--text-main);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .window-body {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-      }
-
-      /* macOS Sidebar */
-      .macos-sidebar {
-        width: 220px;
-        background: rgba(0, 0, 0, 0.15);
-        border-right: 1px solid var(--surface-border);
-        padding: 18px 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .sidebar-item {
-        padding: 10px 14px;
-        border-radius: calc(var(--border-radius) / 2);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: var(--text-muted);
-        transition: all 0.2s;
-      }
-
-      .sidebar-item:hover {
-        background: rgba(255,255,255,0.06);
-        color: var(--text-main);
-      }
-
-      .sidebar-item.active {
-        background: var(--accent);
-        color: #fff;
-        box-shadow: 0 4px 14px var(--accent-glow);
-      }
-
-      .window-content {
-        flex: 1;
-        overflow-y: auto;
-        padding: 32px 40px;
-      }
-
-      /* macOS Bottom Dock */
-      .macos-dock {
-        position: fixed;
-        bottom: 16px;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 64px;
-        padding: 0 14px;
-        background: rgba(30, 30, 35, 0.45);
-        backdrop-filter: blur(35px);
-        -webkit-backdrop-filter: blur(35px);
-        border: 1px solid var(--surface-border);
-        border-radius: 22px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        z-index: 1000;
-      }
-
-      .dock-app {
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        color: #fff;
-        cursor: pointer;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        position: relative;
-      }
-      .dock-app:hover {
-        transform: scale(1.22) translateY(-6px);
-      }
-      .dock-app.active::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        width: 4px;
-        height: 4px;
-        background: var(--text-main);
-        border-radius: 50%;
-      }
-    }
-
-    /* ================= MOBILE (iOS) STYLING ================= */
-    @media (max-width: 768px) {
-      .macos-menubar, .macos-dock, .macos-sidebar, .window-header {
-        display: none !important;
-      }
-
-      body {
-        padding-bottom: 95px;
-      }
-
-      /* iOS Dynamic Island */
-      .ios-header {
-        position: sticky;
-        top: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding: 12px 16px;
-        z-index: 999;
-      }
-
-      .dynamic-island {
-        background: #000000;
-        border: 1px solid rgba(255,255,255,0.15);
-        height: 42px;
-        padding: 0 16px;
-        border-radius: 99px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: white;
-        font-size: 13px;
-        font-weight: 700;
-        box-shadow: 0 12px 28px rgba(0,0,0,0.6);
-        animation: islandExpand 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-
-      .island-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #30D158;
-        box-shadow: 0 0 10px #30D158;
-        animation: blink 2s infinite ease;
-      }
-
-      .desktop-stage {
-        padding: 16px;
-      }
-
-      .macos-window {
-        background: transparent;
-        box-shadow: none;
-        border: none;
-        width: 100%;
-      }
-
-      .window-content {
-        padding: 8px 4px;
-      }
-
-      /* iOS Floating Tabbar */
-      .ios-tabbar {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        right: 20px;
-        height: 64px;
-        background: var(--surface);
-        backdrop-filter: blur(35px);
-        -webkit-backdrop-filter: blur(35px);
-        border: 1px solid var(--surface-border);
-        border-radius: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        z-index: 1000;
-      }
-
-      .tab-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        color: var(--text-muted);
-        font-size: 11px;
-        font-weight: 600;
-        cursor: pointer;
-        padding: 8px 16px;
-        border-radius: 18px;
-        transition: all 0.2s;
-      }
-
-      .tab-item i { font-size: 18px; }
-
-      .tab-item.active {
-        color: var(--accent);
-      }
-    }
-
-    /* ================= MAIN CONTENT VIEWS ================= */
-    .view-container {
-      display: none;
-      animation: viewSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .view-container.active {
-      display: block;
-    }
-
-    /* Hero Section */
-    .hero-banner {
-      background: var(--surface-solid);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--border-radius);
-      padding: 36px 28px;
+    .doodle-box {
+      width: 140px;
+      height: 140px;
       position: relative;
-      overflow: hidden;
-      margin-bottom: 28px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      animation: floatDoodle 2.6s ease-in-out infinite alternate;
     }
 
-    .hero-badge {
-      display: inline-flex;
+    @keyframes floatDoodle {
+      0% { transform: translateY(0) rotate(-2deg); }
+      100% { transform: translateY(-14px) rotate(3deg); }
+    }
+
+    .splash-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-top: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .splash-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* === Top Bar (macOS & iOS Hybrid Minimal) === */
+    .top-bar {
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      background: var(--header-bg);
+      border-bottom: 0.5px solid var(--card-border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .bar-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      display: flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
-      border-radius: 99px;
-      background: rgba(10, 132, 255, 0.12);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      border: 1px solid rgba(10, 132, 255, 0.25);
     }
 
-    .hero-banner h1 {
-      font-size: clamp(26px, 4vw, 38px);
+    .theme-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.25s ease;
+    }
+
+    .theme-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* === Main Canvas === */
+    main {
+      width: 100%;
+      max-width: 720px;
+      padding: 24px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Welcome Header */
+    .welcome-card {
+      padding: 10px 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 30px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .welcome-card h1 {
+      font-size: 32px;
       font-weight: 800;
       letter-spacing: -0.8px;
       line-height: 1.15;
-      margin-bottom: 12px;
     }
 
-    .hero-banner p {
-      color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.5;
-      max-width: 580px;
-      margin-bottom: 26px;
-    }
-
-    .action-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn-apple {
-      padding: 13px 24px;
-      border-radius: calc(var(--border-radius) / 1.5);
-      border: none;
-      font-weight: 700;
+    .welcome-card p {
       font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .btn-apple:active {
-      transform: scale(0.96);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 8px 24px var(--accent-glow);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.08);
-      color: var(--text-main);
-      border: 1px solid var(--surface-border);
-    }
-
-    /* Interactive Boredom Generator */
-    .boredom-box {
-      background: var(--surface);
-      border: 1px dashed var(--accent);
-      border-radius: var(--border-radius);
-      padding: 22px;
-      margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .boredom-text h4 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .boredom-text p {
       color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .dice-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: calc(var(--border-radius) / 1.6);
-      background: var(--accent);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 6px 18px var(--accent-glow);
-      flex-shrink: 0;
-      transition: transform 0.3s;
-    }
-
-    .dice-btn:active {
-      transform: rotate(180deg) scale(0.9);
-    }
-
-    /* Cards Grid */
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-
-    .glass-card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--border-radius);
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .glass-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255,255,255,0.22);
-    }
-
-    .card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: calc(var(--border-radius) / 1.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      color: white;
-      margin-bottom: 14px;
-    }
-
-    .glass-card h3 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .glass-card p {
-      color: var(--text-muted);
-      font-size: 13px;
       line-height: 1.4;
     }
 
-    /* Founder Special Highlight Card */
-    .founder-card {
-      background: linear-gradient(135deg, rgba(255, 45, 85, 0.1), rgba(88, 86, 214, 0.1));
-      border: 1px solid rgba(255, 45, 85, 0.25);
-      border-radius: var(--border-radius);
-      padding: 24px;
+    /* Papers List */
+    .pdf-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .paper-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 16px 18px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
+      gap: 16px;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
 
-    .founder-info {
+    .paper-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .paper-left {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      min-width: 0;
     }
 
-    .founder-avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #FF2D55, #AF52DE);
-      color: white;
+    .file-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ff4d6d, #ff758f);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 8px 18px rgba(255, 45, 85, 0.35);
+      flex-shrink: 0;
+      color: white;
+      box-shadow: 0 6px 16px rgba(255, 77, 109, 0.3);
     }
 
-    .founder-title h4 {
-      font-size: 16px;
-      font-weight: 800;
+    .paper-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
     }
 
-    .founder-title p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* ================= SETTINGS VIEW ================= */
-    .settings-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .settings-sub {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
-
-    .settings-group {
-      background: var(--surface-solid);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--border-radius);
-      padding: 22px;
-      margin-bottom: 22px;
-    }
-
-    .settings-group h3 {
+    .paper-title {
       font-size: 15px;
       font-weight: 700;
-      margin-bottom: 16px;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .paper-meta {
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-
-    .setting-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--surface-border);
-      font-size: 14px;
-    }
-
-    .setting-row:last-child {
-      border-bottom: none;
-    }
-
-    .color-swatches {
-      display: flex;
-      gap: 10px;
-    }
-
-    .color-swatch {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .color-swatch:hover { transform: scale(1.15); }
-    .color-swatch.active { outline: 3px solid #fff; outline-offset: 2px; }
-
-    /* Custom Apple Range Sliders */
-    input[type="range"] {
-      -webkit-appearance: none;
-      width: 130px;
-      background: rgba(255, 255, 255, 0.15);
-      height: 6px;
-      border-radius: 99px;
-      outline: none;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-
-    .theme-segmented {
-      display: flex;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--surface-border);
-      border-radius: 12px;
-      padding: 3px;
-      gap: 4px;
-    }
-    .theme-seg-btn {
-      padding: 6px 14px;
-      border-radius: 9px;
-      border: none;
-      background: transparent;
+      gap: 8px;
+      font-size: 12px;
       color: var(--text-muted);
+    }
+
+    .paper-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .pill-year {
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    /* Apple-style Action Buttons */
+    .paper-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-preview {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-preview:hover {
+      background: rgba(120, 120, 128, 0.12);
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 9px 15px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
-    }
-    .theme-seg-btn.active {
-      background: var(--accent);
-      color: #fff;
+      box-shadow: 0 4px 14px rgba(255, 77, 109, 0.35);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* Animations */
-    @keyframes windowPop {
-      0% { opacity: 0; transform: scale(0.96) translateY(20px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+    .btn-download:hover {
+      opacity: 0.95;
+      transform: scale(1.03);
     }
-    @keyframes viewSlide {
-      0% { opacity: 0; transform: translateY(12px); }
-      100% { opacity: 1; transform: translateY(0); }
+
+    .btn-download:active {
+      transform: scale(0.96);
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+
+    /* SweetAlert Custom Apple Theme */
+    .swal2-popup.apple-modal {
+      border-radius: 28px !important;
+      padding: 24px 20px !important;
+      background: var(--card-bg) !important;
+      backdrop-filter: blur(30px) !important;
+      -webkit-backdrop-filter: blur(30px) !important;
+      border: 1px solid var(--card-border) !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2) !important;
     }
-    @keyframes islandExpand {
-      0% { transform: scale(0.85); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+
+    .smile-box {
+      margin: 15px 0 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .smile-interactive-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 22px rgba(255, 77, 109, 0.4);
+      animation: pulseSmile 1.8s infinite alternate;
+      transition: transform 0.2s ease;
+    }
+
+    .smile-interactive-btn:active {
+      transform: scale(0.92);
+    }
+
+    @keyframes pulseSmile {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+
+    .smile-face-preview {
+      font-size: 64px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 20px 0;
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Light FX -->
-  <div class="screen-ambient"></div>
-
-  <!-- ================= DESKTOP macOS MENU BAR ================= -->
-  <header class="macos-menubar">
-    <div class="macos-menu-left">
-      <span class="apple-icon"><i class="fa-brands fa-apple"></i></span>
-      <span class="menu-bold">YrChitChat</span>
-      <span class="menu-item" onclick="switchView('home')">Chat</span>
-      <span class="menu-item" onclick="switchView('settings')">Settings</span>
-      <span class="menu-item" onclick="openFounder()">Founder</span>
+  <!-- 1. CUTE DOODLE SPLASH SCREEN -->
+  <div id="splash-screen">
+    <div class="doodle-box">
+      <!-- Cute Smiling Bear / Cat Doodle SVG -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="14" fill="#FFB4C2" />
+        <circle cx="72" cy="28" r="14" fill="#FFB4C2" />
+        <circle cx="28" cy="28" r="7" fill="#FF758F" />
+        <circle cx="72" cy="28" r="7" fill="#FF758F" />
+        <circle cx="50" cy="54" r="38" fill="#FFE5EC" />
+        <ellipse cx="38" cy="50" rx="3.5" ry="5" fill="#333" />
+        <ellipse cx="62" cy="50" rx="3.5" ry="5" fill="#333" />
+        <ellipse cx="30" cy="58" rx="5" ry="3.5" fill="#FF758F" opacity="0.6" />
+        <ellipse cx="70" cy="58" rx="5" ry="3.5" fill="#FF758F" opacity="0.6" />
+        <path d="M47 56L53 56L50 60Z" fill="#FF4D6D" />
+        <path d="M44 63C46.5 67 53.5 67 56 63" stroke="#333" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M50 14L52 8L55 12" stroke="#FF4D6D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
     </div>
-    <div class="macos-menu-right">
-      <span><i class="fa-solid fa-wifi"></i></span>
-      <span><i class="fa-solid fa-battery-full"></i> 100%</span>
-      <span id="macos-time">12:00 PM</span>
-    </div>
-  </header>
-
-  <!-- ================= MOBILE iOS TOP DYNAMIC ISLAND ================= -->
-  <header class="ios-header">
-    <div class="dynamic-island" onclick="triggerIslandAction()">
-      <span class="island-dot"></span>
-      <span>YrChitChat • Live</span>
-      <i class="fa-solid fa-bolt" style="color: #FFD60A; font-size: 11px;"></i>
-    </div>
-  </header>
-
-  <!-- ================= MAIN STAGE ================= -->
-  <div class="desktop-stage">
-    <div class="macos-window">
-
-      <!-- Window Header (Desktop) -->
-      <div class="window-header">
-        <div class="traffic-lights">
-          <div class="traffic-dot dot-red" onclick="windowAction('close')"></div>
-          <div class="traffic-dot dot-yellow" onclick="windowAction('minimize')"></div>
-          <div class="traffic-dot dot-green" onclick="windowAction('zoom')"></div>
-        </div>
-        <div class="window-title">
-          <i class="fa-regular fa-comments" style="color: var(--accent);"></i> YrChitChat — Connecting people
-        </div>
-      </div>
-
-      <div class="window-body">
-        <!-- Sidebar Navigation (Desktop) -->
-        <aside class="macos-sidebar">
-          <div class="sidebar-item active" id="side-home" onclick="switchView('home')">
-            <i class="fa-solid fa-house"></i> Lounge
-          </div>
-          <div class="sidebar-item" id="side-settings" onclick="switchView('settings')">
-            <i class="fa-solid fa-sliders"></i> Customization
-          </div>
-          <div class="sidebar-item" onclick="joinTelegramGroup()">
-            <i class="fa-brands fa-telegram"></i> Telegram Group
-          </div>
-          <div class="sidebar-item" onclick="openFounder()">
-            <i class="fa-solid fa-shield-halved"></i> Founder Contact
-          </div>
-        </aside>
-
-        <!-- Window Content Area -->
-        <main class="window-content">
-
-          <!-- ================= PAGE 1: HOME VIEW ================= -->
-          <section id="view-home" class="view-container active">
-            
-            <div class="hero-banner">
-              <div class="hero-badge">
-                <i class="fa-solid fa-sparkles"></i> Kill Your Boredom 24/7
-              </div>
-              <h1>Bored out of your mind?<br>Wanna chat right now?</h1>
-              <p>Skip the small talk. YrChitChat is where random thoughts, deep midnight conversations, and lively banters happen uninterrupted.</p>
-              
-              <div class="action-group">
-                <button class="btn-apple btn-primary" onclick="joinTelegramGroup()">
-                  <i class="fa-brands fa-telegram"></i> Join @yrchitchat
-                </button>
-                <button class="btn-apple btn-secondary" onclick="openFounder()">
-                  <i class="fa-solid fa-user-astronaut"></i> Founder @limitedladka
-                </button>
-              </div>
-            </div>
-
-            <!-- Boredom Breaker Generator -->
-            <div class="boredom-box">
-              <div class="boredom-text">
-                <h4 id="boredom-topic">"What is the most useless superpower you'd actually love to have?"</h4>
-                <p>Tap the dice to get a spicy icebreaker for the chat group!</p>
-              </div>
-              <button class="dice-btn" onclick="shuffleTopic()" title="New topic">
-                <i class="fa-solid fa-shuffle"></i>
-              </button>
-            </div>
-
-            <!-- Features Grid -->
-            <div class="grid-cards">
-              <div class="glass-card">
-                <div class="card-icon" style="background: linear-gradient(135deg, #0A84FF, #5E5CE6);">
-                  <i class="fa-solid fa-fire"></i>
-                </div>
-                <h3>Active Voice Chats</h3>
-                <p>No awkward silences. Jump into open voice rooms whenever sleep is far away.</p>
-              </div>
-
-              <div class="glass-card">
-                <div class="card-icon" style="background: linear-gradient(135deg, #30D158, #007AFF);">
-                  <i class="fa-solid fa-shield-cat"></i>
-                </div>
-                <h3>Strictly Chill Vibes</h3>
-                <p>Zero toxicity, friendly moderators, and a place built purely for companionship.</p>
-              </div>
-
-              <div class="glass-card">
-                <div class="card-icon" style="background: linear-gradient(135deg, #FF9500, #FF2D55);">
-                  <i class="fa-solid fa-bolt"></i>
-                </div>
-                <h3>Instant Friends</h3>
-                <p>From anime arguments to tech gossip, there's always someone typing right now.</p>
-              </div>
-            </div>
-
-            <!-- Founder Spotlight -->
-            <div class="founder-card">
-              <div class="founder-info">
-                <div class="founder-avatar">
-                  <i class="fa-solid fa-crown"></i>
-                </div>
-                <div class="founder-title">
-                  <h4>Created by Limited Ladka</h4>
-                  <p>Community Lead • Telegram: @limitedladka</p>
-                </div>
-              </div>
-              <button class="btn-apple btn-secondary" onclick="openFounder()">
-                DM Founder
-              </button>
-            </div>
-
-          </section>
-
-          <!-- ================= PAGE 2: SETTINGS VIEW ================= -->
-          <section id="view-settings" class="view-container">
-            <h2 class="settings-title">Appearance & System</h2>
-            <p class="settings-sub">Full granular control over your YrChitChat interface styles.</p>
-
-            <!-- Theme Preset -->
-            <div class="settings-group">
-              <h3><i class="fa-solid fa-palette" style="color: var(--accent);"></i> Color Theme</h3>
-              <div class="setting-row">
-                <span>Theme Mode</span>
-                <div class="theme-segmented">
-                  <button class="theme-seg-btn active" id="btn-dark" onclick="setThemeMode('dark')">Dark</button>
-                  <button class="theme-seg-btn" id="btn-light" onclick="setThemeMode('light')">Light</button>
-                  <button class="theme-seg-btn" id="btn-oled" onclick="setThemeMode('oled')">OLED</button>
-                </div>
-              </div>
-
-              <div class="setting-row">
-                <span>Accent Color</span>
-                <div class="color-swatches">
-                  <div class="color-swatch active" style="background: #0A84FF;" onclick="setAccent('#0A84FF', this)"></div>
-                  <div class="color-swatch" style="background: #AF52DE;" onclick="setAccent('#AF52DE', this)"></div>
-                  <div class="color-swatch" style="background: #FF2D55;" onclick="setAccent('#FF2D55', this)"></div>
-                  <div class="color-swatch" style="background: #30D158;" onclick="setAccent('#30D158', this)"></div>
-                  <div class="color-swatch" style="background: #FF9500;" onclick="setAccent('#FF9500', this)"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Sliders for Customization -->
-            <div class="settings-group">
-              <h3><i class="fa-solid fa-sliders" style="color: var(--accent);"></i> Layout Dimensions</h3>
-              
-              <div class="setting-row">
-                <span>Base Font Size (<span id="val-font">15px</span>)</span>
-                <input type="range" min="13" max="18" value="15" oninput="updateFontSize(this.value)">
-              </div>
-
-              <div class="setting-row">
-                <span>Corner Radius (<span id="val-radius">22px</span>)</span>
-                <input type="range" min="8" max="36" value="22" oninput="updateRadius(this.value)">
-              </div>
-
-              <div class="setting-row">
-                <span>Glass Blur Intensity (<span id="val-blur">24px</span>)</span>
-                <input type="range" min="5" max="45" value="24" oninput="updateBlur(this.value)">
-              </div>
-            </div>
-
-            <!-- Web App / Utility Actions -->
-            <div class="settings-group">
-              <h3><i class="fa-solid fa-mobile-screen-button" style="color: var(--accent);"></i> Web App Controls</h3>
-              
-              <div class="setting-row">
-                <span>Install YrChitChat shortcut</span>
-                <button class="btn-apple btn-secondary" onclick="simulateInstall()">
-                  <i class="fa-solid fa-download"></i> Install
-                </button>
-              </div>
-
-              <div class="setting-row">
-                <span>Reset all settings to default</span>
-                <button class="btn-apple btn-secondary" style="color: var(--traffic-red);" onclick="resetDefaults()">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-              </div>
-            </div>
-
-          </section>
-
-        </main>
-      </div>
-
-    </div>
+    <div class="splash-title">Hi Priyanshi! ✨</div>
+    <div class="splash-subtitle">Preparing your IT/ITeS papers...</div>
   </div>
 
-  <!-- ================= DESKTOP macOS DOCK ================= -->
-  <nav class="macos-dock">
-    <div class="dock-app active" id="dock-home" title="Lounge" onclick="switchView('home')" style="background: linear-gradient(135deg, #0A84FF, #0040DD);">
-      <i class="fa-solid fa-message"></i>
+  <!-- 2. MINIMAL TOP BAR -->
+  <header class="top-bar">
+    <div class="traffic-lights">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
     </div>
-    <div class="dock-app" id="dock-settings" title="Customization" onclick="switchView('settings')" style="background: linear-gradient(135deg, #8E8E93, #636366);">
-      <i class="fa-solid fa-gear"></i>
+    <div class="bar-title">
+      <span>IT/ITeS Hub</span>
     </div>
-    <div class="dock-app" title="Telegram Group" onclick="joinTelegramGroup()" style="background: linear-gradient(135deg, #2AABEE, #229ED9);">
-      <i class="fa-brands fa-telegram"></i>
-    </div>
-    <div class="dock-app" title="Founder Limited Ladka" onclick="openFounder()" style="background: linear-gradient(135deg, #FF2D55, #AF52DE);">
-      <i class="fa-solid fa-crown"></i>
-    </div>
-  </nav>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span>
+      <span id="theme-text">Dark</span>
+    </button>
+  </header>
 
-  <!-- ================= MOBILE iOS FLOATING TABBAR ================= -->
-  <nav class="ios-tabbar">
-    <div class="tab-item active" id="tab-home" onclick="switchView('home')">
-      <i class="fa-solid fa-message"></i>
-      <span>Lounge</span>
-    </div>
-    <div class="tab-item" id="tab-tg" onclick="joinTelegramGroup()">
-      <i class="fa-brands fa-telegram"></i>
-      <span>Join Group</span>
-    </div>
-    <div class="tab-item" id="tab-settings" onclick="switchView('settings')">
-      <i class="fa-solid fa-sliders"></i>
-      <span>Settings</span>
-    </div>
-  </nav>
+  <!-- 3. MAIN CONTENT -->
+  <main>
+    <section class="welcome-card">
+      <div class="badge">🌸 Special Edition for Priyanshi</div>
+      <h1>JAC Class 12th Papers</h1>
+      <p>Sara papers ek jagah ready hain. Just click download, smile karo aur download start! 📚</p>
+    </section>
 
-  <!-- ================= JAVASCRIPT ================= -->
+    <!-- PAPERS LIST -->
+    <section class="pdf-list" id="papers-container">
+      <!-- Cards rendered via JavaScript -->
+    </section>
+
+    <footer>
+      Crafted with love for Priyanshi • Easy Peasy Study Space ✨
+    </footer>
+  </main>
+
   <script>
-    // Live Time Clock for macOS Menu Bar
-    function updateClock() {
-      const now = new Date();
-      let hours = now.getHours();
-      let minutes = now.getMinutes();
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      const timeStr = `${hours}:${minutes} ${ampm}`;
-      const elem = document.getElementById("macos-time");
-      if (elem) elem.textContent = timeStr;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // SPA View Switcher
-    function switchView(viewName) {
-      document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-      const activeView = document.getElementById(`view-${viewName}`);
-      if (activeView) activeView.classList.add('active');
-
-      // Update macOS Sidebar
-      document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-      const sideItem = document.getElementById(`side-${viewName}`);
-      if (sideItem) sideItem.classList.add('active');
-
-      // Update macOS Dock
-      document.querySelectorAll('.dock-app').forEach(el => el.classList.remove('active'));
-      const dockItem = document.getElementById(`dock-${viewName}`);
-      if (dockItem) dockItem.classList.add('active');
-
-      // Update iOS Tabs
-      document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
-      const tabItem = document.getElementById(`tab-${viewName}`);
-      if (tabItem) tabItem.classList.add('active');
-    }
-
-    // Boredom Topics Pool
-    const topics = [
-      "What is the most useless superpower you'd actually love to have?",
-      "If you could delete one social media platform forever, which one goes first?",
-      "What is a lie you told that ended up getting completely out of hand?",
-      "What is your all-time favorite late-night comfort food?",
-      "If you were banned from your country, where would you move tomorrow?",
-      "What’s an unwritten rule in life that everyone should follow?"
+    // File details matching your folder
+    const papers = [
+      {
+        fileName: "jac-class-12-it-ites-42010-2024.pdf",
+        title: "Annual Intermediate Exam 2024",
+        sub: "JAC IT/ITeS Vocational (42010)",
+        year: "2024",
+        size: "344 KB",
+        iconText: "24"
+      },
+      {
+        fileName: "jac-class-12-it-ites-1010-2023.pdf",
+        title: "Annual Intermediate Exam 2023",
+        sub: "JAC IT/ITeS Vocational (1010)",
+        year: "2023",
+        size: "398 KB",
+        iconText: "23"
+      },
+      {
+        fileName: "jac-class-12-it-ites-2670.pdf",
+        title: "Official Model Question Paper",
+        sub: "JAC IT/ITeS Vocational (2670)",
+        year: "Set-1",
+        size: "354 KB",
+        iconText: "SET"
+      },
+      {
+        fileName: "jac-class-12-it-ites-2670-2026.pdf",
+        title: "Model Question Paper 2026",
+        sub: "JAC IT/ITeS Vocational (2670-2026)",
+        year: "2026",
+        size: "354 KB",
+        iconText: "26"
+      }
     ];
-    let topicIndex = 0;
-    function shuffleTopic() {
-      topicIndex = (topicIndex + 1) % topics.length;
-      const el = document.getElementById("boredom-topic");
-      el.style.opacity = '0';
-      setTimeout(() => {
-        el.textContent = `"${topics[topicIndex]}"`;
-        el.style.opacity = '1';
-      }, 150);
 
-      iziToast.show({
-        title: 'New Topic Rolled!',
-        message: 'Share this in @yrchitchat right now!',
-        position: 'topCenter',
-        timeout: 2000,
-        progressBar: false,
-        theme: 'dark',
-        backgroundColor: 'var(--accent)'
+    // Render Papers
+    function renderPapers() {
+      const container = document.getElementById("papers-container");
+      container.innerHTML = papers.map((paper, index) => `
+        <div class="paper-card">
+          <div class="paper-left">
+            <div class="file-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <div class="paper-details">
+              <div class="paper-title">${paper.title}</div>
+              <div class="paper-meta">
+                <span class="pill-year">${paper.year}</span>
+                <span>•</span>
+                <span>${paper.size}</span>
+              </div>
+            </div>
+          </div>
+          <div class="paper-actions">
+            <button class="btn-preview" title="Quick View" onclick="viewPdf('${paper.fileName}')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <button class="btn-download" onclick="triggerSmileDownload('${paper.fileName}', '${paper.title}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Get</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // View PDF directly in new tab
+    function viewPdf(fileName) {
+      window.open(fileName, '_blank');
+    }
+
+    // 4. SMILE TO DOWNLOAD INTERACTION
+    function triggerSmileDownload(fileName, title) {
+      Swal.fire({
+        title: '<span style="font-size: 20px; font-weight:800;">Smile Verification Required! 😊</span>',
+        html: `
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">
+            Priyanshi, download karne se pehle pyari si smile do! ✨
+          </p>
+          <div class="smile-box">
+            <div id="smileFace" class="smile-face-preview">😐</div>
+            <button id="giveSmileBtn" class="smile-interactive-btn" onclick="acceptSmile('${fileName}', '${title}')">
+              <span>Touch to Smile! 🥰</span>
+            </button>
+          </div>
+        `,
+        showConfirmButton: false,
+        showCloseButton: true,
+        customClass: {
+          popup: 'apple-modal'
+        }
       });
     }
 
-    // Telegram Redirect Actions
-    function joinTelegramGroup() {
+    // Accept Smile & Trigger Download
+    function acceptSmile(fileName, title) {
+      const face = document.getElementById("smileFace");
+      if (face) {
+        face.textContent = "🥰✨";
+        face.style.transform = "scale(1.3) rotate(6deg)";
+      }
+
+      // Confetti burst
       confetti({
-        particleCount: 90,
-        spread: 60,
-        origin: { y: 0.8 }
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff4d6d', '#ff758f', '#007aff', '#ffbd2e']
       });
 
-      Swal.fire({
-        title: 'Join YrChitChat Community',
-        text: 'Ready to connect? Jump into @yrchitchat to kill your boredom!',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '<i class="fa-brands fa-telegram"></i> Open Telegram',
-        cancelButtonText: 'Stay Here',
-        customClass: {
-          popup: 'glass-card',
-          confirmButton: 'btn-apple btn-primary',
-          cancelButton: 'btn-apple btn-secondary'
-        },
-        buttonsStyling: false
-      }).then((res) => {
-        if (res.isConfirmed) {
-          window.open('https://t.me/yrchitchat', '_blank');
-        }
-      });
+      // Close modal smoothly
+      setTimeout(() => {
+        Swal.close();
+
+        // iziToast notification
+        iziToast.show({
+          title: 'Smile Verified! 🥰',
+          message: `${title} is downloading now!`,
+          position: 'topCenter',
+          theme: 'light',
+          backgroundColor: '#ff4d6d',
+          titleColor: '#ffffff',
+          messageColor: '#ffffff',
+          iconColor: '#ffffff',
+          progressBarColor: '#ffffff',
+          timeout: 4000
+        });
+
+        // Trigger real file download
+        const a = document.createElement('a');
+        a.href = fileName;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 550);
     }
 
-    function openFounder() {
-      Swal.fire({
-        title: 'Contact Founder',
-        html: `Creator: <b>@limitedladka</b><br><span style="font-size: 13px; color: var(--text-muted);">Have questions or partnership ideas for YrChitChat?</span>`,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Message @limitedladka',
-        cancelButtonText: 'Close',
-        customClass: {
-          popup: 'glass-card',
-          confirmButton: 'btn-apple btn-primary',
-          cancelButton: 'btn-apple btn-secondary'
-        },
-        buttonsStyling: false
-      }).then((res) => {
-        if (res.isConfirmed) {
-          window.open('https://t.me/limitedladka', '_blank');
-        }
-      });
+    // 5. THEME TOGGLE (LIGHT / DARK)
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      setTheme(newTheme);
     }
 
-    // Dynamic Island Click Interaction
-    function triggerIslandAction() {
-      iziToast.info({
-        title: 'YrChitChat Island',
-        message: 'Active Voice Lounge is live right now!',
-        position: 'topCenter',
-        timeout: 3000
-      });
-    }
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("priyanshi_theme", theme);
+      const icon = document.getElementById("theme-icon");
+      const text = document.getElementById("theme-text");
 
-    // Window traffic light dummy triggers
-    function windowAction(action) {
-      if (action === 'close') {
-        iziToast.warning({ title: 'macOS Alert', message: 'Window cannot be closed in web mode.', position: 'topCenter' });
-      } else if (action === 'minimize') {
-        iziToast.info({ title: 'Minimized', message: 'YrChitChat running smoothly.', position: 'topCenter' });
-      } else if (action === 'zoom') {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
-        }
+      if (theme === "dark") {
+        icon.textContent = "☀️";
+        text.textContent = "Light";
+      } else {
+        icon.textContent = "🌙";
+        text.textContent = "Dark";
       }
     }
 
-    // ================= CUSTOMIZATION SETTINGS ENGINE =================
-    const root = document.documentElement;
+    // Init Theme & Splash Screen dismiss
+    window.addEventListener("DOMContentLoaded", () => {
+      // Saved Theme or system preference
+      const savedTheme = localStorage.getItem("priyanshi_theme") || 
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      setTheme(savedTheme);
 
-    function setThemeMode(mode) {
-      root.setAttribute('data-theme', mode);
-      document.querySelectorAll('.theme-seg-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-${mode}`);
-      if (activeBtn) activeBtn.classList.add('active');
-      localStorage.setItem('yrchitchat_theme', mode);
-    }
+      renderPapers();
 
-    function setAccent(color, element) {
-      root.style.setProperty('--accent', color);
-      root.style.setProperty('--accent-glow', color + '55');
-      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-      element.classList.add('active');
-      localStorage.setItem('yrchitchat_accent', color);
-    }
-
-    function updateFontSize(val) {
-      root.style.setProperty('--font-size', val + 'px');
-      document.getElementById('val-font').textContent = val + 'px';
-      localStorage.setItem('yrchitchat_font', val);
-    }
-
-    function updateRadius(val) {
-      root.style.setProperty('--border-radius', val + 'px');
-      document.getElementById('val-radius').textContent = val + 'px';
-      localStorage.setItem('yrchitchat_radius', val);
-    }
-
-    function updateBlur(val) {
-      root.style.setProperty('--glass-blur', val + 'px');
-      document.getElementById('val-blur').textContent = val + 'px';
-      localStorage.setItem('yrchitchat_blur', val);
-    }
-
-    function simulateInstall() {
-      Swal.fire({
-        title: 'Install YrChitChat',
-        text: 'To install on iOS: Tap Share -> "Add to Home Screen". On Chrome/Desktop: Tap the install icon in the address bar.',
-        icon: 'success',
-        confirmButtonText: 'Got It!',
-        customClass: {
-          popup: 'glass-card',
-          confirmButton: 'btn-apple btn-primary'
-        },
-        buttonsStyling: false
-      });
-    }
-
-    function resetDefaults() {
-      localStorage.clear();
-      setThemeMode('dark');
-      root.style.setProperty('--accent', '#0A84FF');
-      root.style.setProperty('--accent-glow', 'rgba(10, 132, 255, 0.4)');
-      updateFontSize(15);
-      updateRadius(22);
-      updateBlur(24);
-      iziToast.success({ title: 'Reset', message: 'Restored all system defaults.', position: 'topCenter' });
-    }
-
-    // Load Saved Preferences
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('yrchitchat_theme');
-      if (savedTheme) setThemeMode(savedTheme);
-
-      const savedAccent = localStorage.getItem('yrchitchat_accent');
-      if (savedAccent) {
-        root.style.setProperty('--accent', savedAccent);
-        root.style.setProperty('--accent-glow', savedAccent + '55');
-      }
-
-      const savedFont = localStorage.getItem('yrchitchat_font');
-      if (savedFont) updateFontSize(savedFont);
-
-      const savedRadius = localStorage.getItem('yrchitchat_radius');
-      if (savedRadius) updateRadius(savedRadius);
-
-      const savedBlur = localStorage.getItem('yrchitchat_blur');
-      if (savedBlur) updateBlur(savedBlur);
+      // Fade out splash screen after 1.6s
+      setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        splash.style.opacity = "0";
+        setTimeout(() => {
+          splash.style.visibility = "hidden";
+          // Welcome greeting toast
+          iziToast.info({
+            title: 'Welcome Priyanshi! 🌸',
+            message: 'All your Class 12 IT/ITeS papers are ready.',
+            position: 'topRight',
+            timeout: 3500
+          });
+        }, 600);
+      }, 1600);
     });
   </script>
 </body>
